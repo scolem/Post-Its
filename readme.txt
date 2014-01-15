@@ -27,5 +27,5 @@ OR
 transitionIDs: In the form [col1 to col2, col1 to col3, col2 to col1, col2 to col3, col3 to col1, col1 to col2]. 
 Can be found at: Administration -> Issues -> Workflows -> [Workflow for project] -> View. Transition IDs are the numbers in the brackets
 
-IssueName: Can be found at: Administration -> Issues -> [Your selected issue type]. Eg, "Task".
+IssueName: Can be found at: Administration -> Issues -> [Your selected issue type]. Eg, "Task"
 
