@@ -3,7 +3,7 @@ The idea is to mount a Raspberry Pi with a webcam at a fixed location in front o
 
 Setup:
 ...Write setup instructions here...
-(Currently to run on windows: Make sure last line of timelog.txt is a file containing pic.jpg. Change appropriate setting in config file, then run crop.py, followed by manage.py.)Pi set up to follow.
+Go into either Windows or pi directory. Make sure last line of timelog.txt is the same name as file containing pic.jpg. Change appropriate setting in config file, then run crop.py, followed by manage.py.
 
 config.json explination:
 username		The username of the user
