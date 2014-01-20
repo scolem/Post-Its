@@ -1,3 +1,18 @@
+""" Copyright 2014
+   Scott Lemmer<scottlemmer1@gmail.com>
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License."""
+
 #file used to connect with jira
 
 from subprocess import Popen
@@ -7,7 +22,7 @@ import string
 
 def jsonconfig2str():#get the config file as a array
 
-    f=open('config.json', 'r')
+    f=open('C:/Users/Intern2/Documents/Post-Its/pi/config.json', 'r')
     j=json.load(f)
     
     return j
@@ -65,7 +80,7 @@ def moveIssue(issueID, col1, col2):#move issue between columns
 
 def addImage(issueID, imgLink):#add image to issue
    jsonstr=jsonconfig2str()
-   print Popen('curl -u '+jsonstr['username']+':'+jsonstr['password']+' -X POST -H "X-Atlassian-Token: nocheck" -F "file=@'+jsonstr['picDirectory']+imgLink+'" '+jsonstr['jiraDirectory']+'/rest/api/2/issue/'+issueID+'/attachments', stdout=PIPE, shell=True).stdout.read() 
+   print Popen('curl -u '+jsonstr['username']+':'+jsonstr['password']+' -X POST -H "X-Atlassian-Token: nocheck" -F "file=@'+imgLink+'" '+jsonstr['jiraDirectory']+'/rest/api/2/issue/'+issueID+'/attachments', stdout=PIPE, shell=True).stdout.read() 
 
     
 def newIssue(picLink, col):#create new issue
@@ -73,7 +88,7 @@ def newIssue(picLink, col):#create new issue
     jsonstr=jsonconfig2str()
 
     fout=open(jsonstr['picDirectory']+"new.txt", "w")
-    fout.write('{"fields": {"project":{"key": "'+jsonstr["projectKey"]+'" },"summary": "'+jsonstr['summary']+'","description": "'+jsonstr['description']+'","issuetype": {"name": "'+jsonstr["issueName"]+'"}}}')
+    fout.write('{"fields": {"project":{"key": "'+jsonstr["projectKey"]+'" },"summary": "'+jsonstr['summary']+'","description": "'+jsonstr['description']+'","issuetype": {"name": "'+jsonstr["issueName"]+'"},"priority": {"name": "'+jsonstr["priority"]+'"}}}')
     fout.close()
     
     print '1'
@@ -91,7 +106,7 @@ def newIssue(picLink, col):#create new issue
     if col != '1':
         moveIssue(issueID, '1', col)
 
-    editJSONfield(issueID, "issueID", jsonstr['picDirectory']+picLink[:-3] + 'json')
+    editJSONfield(issueID, "issueID", picLink[:-3] + 'json')
 
 def deleteIssue(issueID):#delete issue
     jsonstr=jsonconfig2str()
