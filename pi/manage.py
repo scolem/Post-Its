@@ -1,11 +1,28 @@
+""" Copyright 2014
+   Scott Lemmer<scottlemmer1@gmail.com>
+   Nelson Akoku Ebot Eno Akpa <akokuenow@gmail.com>
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License."""
+
 import cv2
 import numpy as numpy
 import glob
 import json
 from test import *
 from issue import *
+from issue import jsonconfig2str
 
-f=open('timelog.txt', 'r')
+f=open(jsonconfig2str()['picDirectory'] +'timelog.txt', 'r')
 
 line=last=f.readline().strip()
 
@@ -24,8 +41,9 @@ print seclast
 #list3 = glob.glob('day2/post?.json') + glob.glob('day2/post??.json')
 #list4 = glob.glob('day1/post?.json') + glob.glob('day1/post??.json')
 
-list1 = glob.glob(last+'/post*.jpg')
-list2 = glob.glob(seclast+'/post*.jpg')
+list1 = glob.glob(jsonconfig2str()['picDirectory'] +last+'/post*.jpg')
+list2 = glob.glob(jsonconfig2str()['picDirectory'] +seclast+'/post*.jpg')
+print list2
 
 checkRem=[0]*len(list2)
 
@@ -33,18 +51,21 @@ def findAndTrack(list1,list2):
 	sims = 0
 	comps = 0
 	for name1 in list1: # glob.glob('day2/post?.jpg'):
-		#print name1
+		name1= name1.replace('\\', '/')
+		print 'name1'+name1
 		count = 0
 		im1 = cv2.imread(name1)
 		sign1 = grid_signature(binarize(im1))
 		for name2 in list2:
 			#print name2
+			name2old=name2
+			name2=name2.replace('\\', '/')
 			im2 = cv2.imread(name2)
 			sign2 = grid_signature(binarize(im2))
 			comps +=1
 			if compare(sign1,sign2) == True:
-				print list2.index(name2)
-				checkRem[list2.index(name2)]=1
+				print list2.index(name2old)
+				checkRem[list2.index(name2old)]=1
 				json_name1 = name1[:-3] + 'json' #day2
 				json_name2 = name2[:-3] + 'json' #day1
 				print json_name2
@@ -131,6 +152,5 @@ def manage():
 
   print 'done'
 
-manage()
-
+findAndTrack(list1,list2)
 	
