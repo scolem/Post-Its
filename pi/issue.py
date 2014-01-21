@@ -34,25 +34,32 @@ def jsonstr2field(strData, field):#get value of specific field form json file
 
 def getTransitionID(col1, col2):# get the transition for the desired transition
     transList=jsonconfig2str()['transitionIDs']
-    transID='0'
-    
-    if col1=='1':
-        if col2=='2':
-            transID=transList[0]
-        elif col2=='3':
-            transID=transList[1]
-            
-    elif col1=='2':
-        if col2=='1':
-            transID=transList[2]
-        elif col2=='3':
-            transID=transList[3]
+##    transID='0'
+##    
+##    if col1=='1':
+##        if col2=='2':
+##            transID=transList[0]
+##        elif col2=='3':
+##            transID=transList[1]
+##            
+##    elif col1=='2':
+##        if col2=='1':
+##            transID=transList[2]
+##        elif col2=='3':
+##            transID=transList[3]
+##
+##    elif col1=='3':
+##        if col2=='1':
+##            transID=transList[4]
+##        elif col2=='2':
+##            transID=transList[5]
 
-    elif col1=='3':
-        if col2=='1':
-            transID=transList[4]
-        elif col2=='2':
-            transID=transList[5]
+    if col2>col1:
+        transID=transList[int(col1)-1][int(col2)-2]
+    elif col2<col1:
+        transID=transList[int(col1)-1][int(col2)-1]
+    else:
+        transID=0
 
     #print 'id'+str(transID)
 
@@ -91,8 +98,8 @@ def newIssue(picLink, col):#create new issue
     fout.write('{"fields": {"project":{"key": "'+jsonstr["projectKey"]+'" },"summary": "'+jsonstr['summary']+'","description": "'+jsonstr['description']+'","issuetype": {"name": "'+jsonstr["issueName"]+'"},"priority": {"name": "'+jsonstr["priority"]+'"}}}')
     fout.close()
     
-    print '1'
-    line= Popen('curl -u '+jsonstr['username']+':'+jsonstr['password']+' -X POST --data @'+jsonstr['picDirectory']+'\\new.txt -H \"Content-Type: application/json\" '+jsonstr['jiraDirectory']+'/rest/api/2/issue/', stdout=PIPE, shell=True).stdout.read()
+    print '1'+jsonstr['username']
+    line= Popen('curl -v -u '+jsonstr['username']+':'+jsonstr['password']+' -X POST --data @'+jsonstr['picDirectory']+'/new.txt -H \"Content-Type: application/json\" '+jsonstr['jiraDirectory']+'/rest/api/2/issue/', stdout=PIPE, shell=True).stdout.read()
     print line
     
     issueID=jsonstr2field(line, "id")
@@ -114,6 +121,6 @@ def deleteIssue(issueID):#delete issue
     
 
 #newIssue("day1/post5.jpg", '1')
-#moveIssue("10346", "2", "1")
+moveIssue("POS-525", "2", "1")
 #deleteIssue("10257")
 #addImage("10259", "day1\\post2.jpg")

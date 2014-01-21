@@ -33,6 +33,8 @@ while line:
 filedir=jsonconfig2str()['picDirectory'] + str(last) + "/"
 print filedir
 
+noCols=jsonconfig2str()['noCols']
+
 #Return the angle in degrees
 def angle(row_diff, col_diff):
   ratio = float(row_diff) / float(col_diff)
@@ -59,11 +61,11 @@ def rotateYellows(image):
 	cv2.imwrite(filedir+'yellow_dots.jpg',yellow_threshed)
 
 	contours, hierarchy = cv2.findContours(yellow_threshed,cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
-	yellows = np.zeros((8,2),dtype = float)
-	my_rows = np.zeros(8,dtype = float)
+	yellows = np.zeros((noCols*2+2,2),dtype = float)
+	my_rows = np.zeros(noCols*2+2,dtype = float)
 	i = 0
 	for cnt in contours:
-		if cv2.contourArea(cnt)> 1000 and i<8:
+		if cv2.contourArea(cnt)> 1000 and i<noCols*2+2:
 			#print cv2.contourArea(cnt)
 			M = cv2.moments(cnt)
 			col,row = float(M['m10']/M['m00']), float(M['m01']/M['m00'])
@@ -73,21 +75,21 @@ def rotateYellows(image):
 			i = i+1
 
 	#-----------------------------------------------------------------
-	#print my_rows
+	print my_rows
 	my_rows.sort()
-	height = my_rows[7]-my_rows[0]
-	#print height
+	height = my_rows[noCols*2+2-1]-my_rows[0]
+	print height
 	percentage = 0.05*height
-	top_rows = my_rows[0:4:]
+	top_rows = my_rows[0:noCols+1:]
 	top_rows_diff = top_rows.max() - top_rows.min()
-	#print 'toprowsdiff = ' + str(top_rows_diff)
+	print 'toprowsdiff = ' + str(top_rows_diff)
 
 	#-----------------------------------------------------------------
 
-	minrow_index = yellows[0:8: , 0:1:].argmin()
-	maxrow_index = yellows[0:8: , 0:1:].argmax()
-	mincol_index = yellows[0:8: , 1::].argmin()
-	maxcol_index = yellows[0:8: , 1::].argmax()
+	minrow_index = yellows[0:noCols*2+2: , 0:1:].argmin()
+	maxrow_index = yellows[0:noCols*2+2: , 0:1:].argmax()
+	mincol_index = yellows[0:noCols*2+2: , 1::].argmin()
+	maxcol_index = yellows[0:noCols*2+2: , 1::].argmax()
 
 	minrow = yellows[minrow_index,0]
 	col4minrow = yellows[minrow_index,1]
@@ -131,12 +133,12 @@ def column(original):
 	cv2.imwrite(filedir+'yellow_edges.jpg',yellow_threshed)
 
 	contours, hierarchy = cv2.findContours(yellow_threshed,cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
-	yellows = np.zeros(8,dtype = float)
-	line = np.zeros(4,dtype = float)
+	yellows = np.zeros(noCols*2+2,dtype = float)
+	line = np.zeros(noCols+1,dtype = float)
 	#region = 0
 	i = 0
 	for cnt in contours:
-		if cv2.contourArea(cnt)> 1000 and i<8:
+		if cv2.contourArea(cnt)> 1000 and i<noCols*2+2:
 			#print cv2.contourArea(cnt)
 			M = cv2.moments(cnt)
 			col,row = int(M['m10']/M['m00']), int(M['m01']/M['m00'])
@@ -144,10 +146,14 @@ def column(original):
 			i = i+1
 	
 	yellows.sort()
-	line[0] = (yellows[0:2:]).mean()
-	line[1] = (yellows[2:4:]).mean()
-	line[2] = (yellows[4:6:]).mean()
-	line[3] = (yellows[6::]).mean()
+
+	for cnt in range (0,noCols+1):
+		line[cnt] = (yellows[cnt*2:cnt*2+2:]).mean()
+	#line[0] = (yellows[0:2:]).mean()
+	#line[1] = (yellows[2:4:]).mean()
+	#line[2] = (yellows[4:6:]).mean()
+	#line[3] = (yellows[6::]).mean()
+	print line
 	return line
 
 #Opencv does not returns vertices in a unique order.
@@ -233,13 +239,19 @@ def square_contours(threshed_image,original,name,region,label):
 			
 			xloc = int((max_col+min_col)/2)
 			yloc = int((max_row+min_row)/2)
-			if(xloc>region[0] and xloc<region[1]):
-				reg = 1
-			elif(xloc>region[1] and xloc<region[2]):
-				reg = 2
-			elif(xloc>region[2] and xloc<region[3]):
-				reg = 3
+			
+##			if(xloc>region[0] and xloc<region[1]):
+##				reg = 1
+##			elif(xloc>region[1] and xloc<region[2]):
+##				reg = 2
+##			elif(xloc>region[2] and xloc<region[3]):
+##				reg = 3
 			#print reg
+				
+			for cnt in range(0, noCols):
+				if(xloc>region[cnt] and xloc<region[cnt+1]):
+					reg = cnt+1
+			
 			sign = grid_signature(binarize(temp_post))
 			#print signature
 

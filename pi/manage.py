@@ -24,11 +24,13 @@ from issue import jsonconfig2str
 
 f=open(jsonconfig2str()['picDirectory'] +'timelog.txt', 'r')
 
-line=last=f.readline().strip()
+line=f.readline().strip()
 
 seclast='';
+last='';
 
 while line:
+  print '*'+line
   seclast=last
   last=line
   line=f.readline().strip()
