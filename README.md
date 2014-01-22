@@ -4,7 +4,7 @@ Design brief and description of program
 ---
 The idea is to mount a Raspberry Pi with a webcam at a fixed location in front of a physical taskboard. It should periodically scan the physical taskboard and using post-it image recognision, make the appropriate Jira API calls to make the appropriate changes to the representation of the Jira issues.
 
-This software was designed on a Raspberry Pi and uses a Raspberry Pi Camera module. The software communicates with a [Jira] (https://www.atlassian.com/software/jira) project and workd best when used with [Jira Agile] (https://www.atlassian.com/software/jira/agile)
+This software was designed on a Raspberry Pi with Raspbian and uses a Raspberry Pi Camera module. The software communicates with a [Jira] (https://www.atlassian.com/software/jira) project and workd best when used with [Jira Agile] (https://www.atlassian.com/software/jira/agile)
 
 When the program runs, it first checks to see if there is something blocking the board. It does this by counting the number of yellow dots and comparing that to the amount there should be according to the number of columns specified. It also takes two pictures with a time delay and compares them for and significant changes. 
 
@@ -14,28 +14,25 @@ One of the pictures that were taken is then processed, and all the individual po
 
 Hardware Required
 ---
-- [Raspberry Pi Model B] (http://www.raspberrypi.org/)
-- [Raspberry Pi Camera Module] (http://www.raspberrypi.org/faqs#camera)
+- [Raspberry Pi Model B] (http://www.raspberrypi.org/) with [Raspbian] (http://www.raspberrypi.org/downloads) installed
+- [Raspberry Pi Camera Module] (http://www.raspberrypi.org/faqs#camera) Setting up the camera: http://www.raspberrypi.org/technical-help-and-resource-documents -> Camera Documentation
 
 Getting started
 ---
 The following need to be installed
 
-- [OpenCV](http://google.com)
-- Complete list with versions and links
+- [OpenCV](http://opencv.org/)
 
 Set up
 --
-- Copy the content of the files from the git onto the Pi
-- Move config.json to ...
--
-- Open .../config.json and make the neccessary changes to the file. See below for more details on each field.
+- Copy the content of the files from the git onto the Pi into the directory /home/pi/Scott/Post-Its
+- Check issue.py has the correct file directory for config.json (about the seventh line below the license)
+- Open config.json and make the neccessary changes to the file. See below for more details on each field.
 - Set up cron:
-
-  - On the Pi, run: crontab -e  
-  - At the bottom of the file type */5 * * * * ... python ...(for now just run crop, then manage)
-  - 
-- On the physical task board, mark the corners of the columns with yellow stickers
+  - On the Pi, run: `crontab -e`  
+  - At the bottom of the file type `*/5 * * * * python /home/pi/Scott/Post-Its/pi/runThis.py >>/tmp/out.txt 2>&1` 
+- On the physical task board, mark the corners of the columns with yellow stickers. All future post-its must be contained within these dots
+- Connect the Pi the network on which Jira is running using a LAN cable
 
 
 Configuring config.json
