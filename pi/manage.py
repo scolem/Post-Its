@@ -1,5 +1,7 @@
-""" Copyright 2014
-   Scott Lemmer<scottlemmer1@gmail.com>
+"""
+Copyright 2014
+
+   Scott Lemmer <scottlemmer1@gmail.com>
    Nelson Akoku Ebot Eno Akpa <akokuenow@gmail.com>
 
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,7 +14,8 @@
    distributed under the License is distributed on an "AS IS" BASIS,
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
-   limitations under the License."""
+   limitations under the License.
+"""
 
 import cv2
 import numpy as numpy
@@ -30,14 +33,12 @@ seclast='';
 last='';
 
 while line:
-  print '*'+line
   seclast=last
   last=line
   line=f.readline().strip()
 
 
-print last
-print seclast
+print 'comparing '+last+' and '+seclast
 #list1 = glob.glob('day2/post?.jpg') + glob.glob('day2/post??.jpg')
 #list2 = glob.glob('day1/post?.jpg') + glob.glob('day1/post??.jpg')
 #list3 = glob.glob('day2/post?.json') + glob.glob('day2/post??.json')
@@ -45,7 +46,7 @@ print seclast
 
 list1 = glob.glob(jsonconfig2str()['picDirectory'] +last+'/post*.jpg')
 list2 = glob.glob(jsonconfig2str()['picDirectory'] +seclast+'/post*.jpg')
-print list2
+#print list2
 
 checkRem=[0]*len(list2)
 
@@ -54,7 +55,7 @@ def findAndTrack(list1,list2):
 	comps = 0
 	for name1 in list1: # glob.glob('day2/post?.jpg'):
 		name1= name1.replace('\\', '/')
-		print 'name1'+name1
+		#print 'name1'+name1
 		count = 0
 		im1 = cv2.imread(name1)
 		sign1 = grid_signature(binarize(im1))
@@ -66,7 +67,7 @@ def findAndTrack(list1,list2):
 			sign2 = grid_signature(binarize(im2))
 			comps +=1
 			if compare(sign1,sign2) == True:
-				print list2.index(name2old)
+				#print list2.index(name2old)
 				checkRem[list2.index(name2old)]=1
 				json_name1 = name1[:-3] + 'json' #day2
 				json_name2 = name2[:-3] + 'json' #day1
@@ -84,16 +85,14 @@ def findAndTrack(list1,list2):
 				with open(json_name1, "w") as jsonFile:
 					jsonFile.write(json.dumps(j2))
 
-				print j2["issueID"]
+				#print j2["issueID"]
 
 				if col==new_col:
 					print name2 + ' has not moved.'
 				else:
 					print name2 + ' has moved'
-					
+					print 'to move issue: '+j2["issueID"]+ str(col)+','+ str(new_col)
 					moveIssue(j2["issueID"], str(col), str(new_col))
-
-					print 'move issue'+j2["issueID"]+ str(col)+ str(new_col)
 
 				count += 1
 				sims +=1
@@ -105,7 +104,7 @@ def findAndTrack(list1,list2):
 			j2 = json.load(f2)
 			new_col = j2["column"]
 
-			print 'to newIssue '+name1+str(new_col)
+			print 'to newIssue: '+name1+','+str(new_col)
 
 			newIssue(name1, str(new_col))
 			
@@ -113,7 +112,7 @@ def findAndTrack(list1,list2):
 		print '\n'
 
 	for i in range (0, len(list2)):
-		print checkRem[i]
+		#print checkRem[i]
 		if(checkRem[i]==0):
 			print list2[i] + " was removed"
 			
@@ -123,36 +122,6 @@ def findAndTrack(list1,list2):
 			#new_col = j["column"]
 
 			deleteIssue(j["issueID"])
-	print sims	
-	print comps
-
-def manage():
-  f=open('timelog.txt', 'r')
-
-  line=last=f.readline().strip()
-
-  seclast='';
-
-  while line:
-    seclast=last
-    last=line
-    line=f.readline().strip()
-
-
-
-  #list1 = glob.glob('day2/post?.jpg') + glob.glob('day2/post??.jpg')
-  #list2 = glob.glob('day1/post?.jpg') + glob.glob('day1/post??.jpg')
-  #list3 = glob.glob('day2/post?.json') + glob.glob('day2/post??.json')
-  #list4 = glob.glob('day1/post?.json') + glob.glob('day1/post??.json')
-
-  list1 = glob.glob(last+'/post*.jpg')
-  list2 = glob.glob(seclast+'/post*.jpg')
-
-  checkRem=[0]*len(list2)
-
-  findAndTrack(list1,list2)
-
-  print 'done'
 
 findAndTrack(list1,list2)
 	

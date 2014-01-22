@@ -1,5 +1,7 @@
-""" Copyright 2014
-   Scott Lemmer<scottlemmer1@gmail.com>
+"""
+Copyright 2014
+
+   Scott Lemmer <scottlemmer1@gmail.com>
    Nelson Akoku Ebot Eno Akpa <akokuenow@gmail.com>
 
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,7 +14,8 @@
    distributed under the License is distributed on an "AS IS" BASIS,
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
-   limitations under the License."""
+   limitations under the License.
+"""
 
 import numpy as np
 import cv2
@@ -31,7 +34,7 @@ while line:
 
 
 filedir=jsonconfig2str()['picDirectory'] + str(last) + "/"
-print filedir
+#print filedir
 
 noCols=jsonconfig2str()['noCols']
 
@@ -58,7 +61,7 @@ def rotateYellows(image):
 	YELLOW_MAX = np.array([35, 255, 255],np.uint8)
 	yellow_threshed = cv2.inRange(hsv_im, YELLOW_MIN, YELLOW_MAX)
 	yellow_threshed = cv2.medianBlur(yellow_threshed,71)
-	cv2.imwrite(filedir+'yellow_dots.jpg',yellow_threshed)
+	#cv2.imwrite(filedir+'yellow_dots.jpg',yellow_threshed)
 
 	contours, hierarchy = cv2.findContours(yellow_threshed,cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
 	yellows = np.zeros((noCols*2+2,2),dtype = float)
@@ -75,14 +78,14 @@ def rotateYellows(image):
 			i = i+1
 
 	#-----------------------------------------------------------------
-	print my_rows
+	#print my_rows
 	my_rows.sort()
 	height = my_rows[noCols*2+2-1]-my_rows[0]
-	print height
+	#print height
 	percentage = 0.05*height
 	top_rows = my_rows[0:noCols+1:]
 	top_rows_diff = top_rows.max() - top_rows.min()
-	print 'toprowsdiff = ' + str(top_rows_diff)
+	#print 'toprowsdiff = ' + str(top_rows_diff)
 
 	#-----------------------------------------------------------------
 
@@ -130,7 +133,7 @@ def column(original):
 	YELLOW_MAX = np.array([35, 255, 255],np.uint8)
 	yellow_threshed = cv2.inRange(hsv_im, YELLOW_MIN, YELLOW_MAX)
 	yellow_threshed = cv2.medianBlur(yellow_threshed,71)	
-	cv2.imwrite(filedir+'yellow_edges.jpg',yellow_threshed)
+	#cv2.imwrite(filedir+'yellow_edges.jpg',yellow_threshed)
 
 	contours, hierarchy = cv2.findContours(yellow_threshed,cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
 	yellows = np.zeros(noCols*2+2,dtype = float)
@@ -153,7 +156,7 @@ def column(original):
 	#line[1] = (yellows[2:4:]).mean()
 	#line[2] = (yellows[4:6:]).mean()
 	#line[3] = (yellows[6::]).mean()
-	print line
+	#print line
 	return line
 
 #Opencv does not returns vertices in a unique order.
@@ -280,11 +283,11 @@ def blue_blobs(hsv_img,original,region):
 	#blue_threshed = cv2.GaussianBlur(blue_threshed,(5,5),5)
 	blue_threshed = cv2.medianBlur(blue_threshed,19)
 	#blue_threshed = cv2.GaussianBlur(blue_threshed,(5,5),1)
-	cv2.imwrite(filedir+'blue.jpg',blue_threshed)
+	#cv2.imwrite(filedir+'blue.jpg',blue_threshed)
 	b_name = 'blue'
 	b_threshed,blues = square_contours(blue_threshed , original , b_name,region,label = 0)
-	cv2.imwrite(filedir+'blue_contours.jpg',b_threshed)
-	print blues 
+	#cv2.imwrite(filedir+'blue_contours.jpg',b_threshed)
+	print str(blues) + ' blues found'
 	return blues
 
 def pink_blobs(hsv_img,original,region,label):
@@ -295,11 +298,11 @@ def pink_blobs(hsv_img,original,region,label):
 	pur_pink_threshed = cv2.inRange(hsv_img	, PINK_MIN, PINK_MAX)
 	#Noise removal 
 	pur_pink_threshed = cv2.medianBlur(pur_pink_threshed,21)
-	cv2.imwrite(filedir+'purpink.jpg',pur_pink_threshed)
+	#cv2.imwrite(filedir+'purpink.jpg',pur_pink_threshed)
 	p_name = 'purpink'
 	p_threshed,purpinks = square_contours(pur_pink_threshed , original, p_name,region,label)
-	cv2.imwrite(filedir+'purpink_contours.jpg',p_threshed)
-	print purpinks 
+	#cv2.imwrite(filedir+'purpink_contours.jpg',p_threshed)
+	print str(purpinks)+' purpinks found' 
 	return purpinks
 
 def green_blobs(hsv_img,original,region,label):
@@ -310,17 +313,17 @@ def green_blobs(hsv_img,original,region,label):
 	green_threshed = cv2.inRange(hsv_img, GREEN_MIN, GREEN_MAX)
 	#Noise removal
 	green_threshed = cv2.medianBlur(green_threshed,21)
-	cv2.imwrite(filedir+'green.jpg',green_threshed)
+	#cv2.imwrite(filedir+'green.jpg',green_threshed)
 	g_name = 'green'
 	g_threshed,greens = square_contours(green_threshed , original, g_name,region,label)
-	cv2.imwrite(filedir+'green_contours.jpg',g_threshed)
-	print greens
+	#cv2.imwrite(filedir+'green_contours.jpg',g_threshed)
+	print str(greens)+' greens found'
 	return greens
 
 def blob(img):
 
 	img = rotateYellows(img)
-	cv2.imwrite(filedir+'rotatedOriginal.jpg',img)
+	#cv2.imwrite(filedir+'rotatedOriginal.jpg',img)
 	region = column(img)
 	original = img.copy()
 	hsv = cv2.cvtColor(img,cv2.COLOR_BGR2HSV)	
@@ -341,4 +344,6 @@ def crop ():
   #im_2_crop = cv2.resize(im_2_crop, (2000,2000))
   img = blob(im_2_crop)
 
+print 'starting crop'
 crop()
+print 'ending crop'

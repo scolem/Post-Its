@@ -1,5 +1,7 @@
-""" Copyright 2014
-   Scott Lemmer<scottlemmer1@gmail.com>
+"""
+Copyright 2014
+
+   Scott Lemmer <scottlemmer1@gmail.com>
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -11,7 +13,8 @@
    distributed under the License is distributed on an "AS IS" BASIS,
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
-   limitations under the License."""
+   limitations under the License.
+"""
 
 #file used to connect with jira
 
@@ -75,6 +78,7 @@ def editJSONfield(issueID, field, filename):#make changes to json file(used to s
     fwrite.write(json.dumps(j))
 
 def moveIssue(issueID, col1, col2):#move issue between columns
+    print 'moving issue'
     jsonstr=jsonconfig2str()
     
     moveID=getTransitionID(col1, col2)
@@ -86,26 +90,24 @@ def moveIssue(issueID, col1, col2):#move issue between columns
     print Popen('curl -u '+jsonstr['username']+':'+jsonstr['password']+' -X POST --data @'+jsonstr['picDirectory']+'\\move.txt -H "Content-Type: application/json" '+jsonstr['jiraDirectory']+'/rest/api/2/issue/'+issueID+'/transitions?expand=transitions.fields ', stdout=PIPE, shell=True).stdout.read()
 
 def addImage(issueID, imgLink):#add image to issue
+   print'adding image'
    jsonstr=jsonconfig2str()
-   print Popen('curl -u '+jsonstr['username']+':'+jsonstr['password']+' -X POST -H "X-Atlassian-Token: nocheck" -F "file=@'+imgLink+'" '+jsonstr['jiraDirectory']+'/rest/api/2/issue/'+issueID+'/attachments', stdout=PIPE, shell=True).stdout.read() 
+   Popen('curl -u '+jsonstr['username']+':'+jsonstr['password']+' -X POST -H "X-Atlassian-Token: nocheck" -F "file=@'+imgLink+'" '+jsonstr['jiraDirectory']+'/rest/api/2/issue/'+issueID+'/attachments', stdout=PIPE, shell=True).stdout.read() 
 
     
 def newIssue(picLink, col):#create new issue
-    print 'start'
+    print 'creating new issue'
     jsonstr=jsonconfig2str()
 
     fout=open(jsonstr['picDirectory']+"new.txt", "w")
     fout.write('{"fields": {"project":{"key": "'+jsonstr["projectKey"]+'" },"summary": "'+jsonstr['summary']+'","description": "'+jsonstr['description']+'","issuetype": {"name": "'+jsonstr["issueName"]+'"},"priority": {"name": "'+jsonstr["priority"]+'"}}}')
     fout.close()
     
-    print '1'+jsonstr['username']
     line= Popen('curl -v -u '+jsonstr['username']+':'+jsonstr['password']+' -X POST --data @'+jsonstr['picDirectory']+'/new.txt -H \"Content-Type: application/json\" '+jsonstr['jiraDirectory']+'/rest/api/2/issue/', stdout=PIPE, shell=True).stdout.read()
     print line
     
     issueID=jsonstr2field(line, "id")
-    print issueID
     
-    print '2'
     #add attachment
     addImage(issueID, picLink)
 
@@ -116,11 +118,12 @@ def newIssue(picLink, col):#create new issue
     editJSONfield(issueID, "issueID", picLink[:-3] + 'json')
 
 def deleteIssue(issueID):#delete issue
+    print 'deleting issue'
     jsonstr=jsonconfig2str()
     print Popen('curl -u '+jsonstr['username']+':'+jsonstr['password']+' -X DELETE -H "Content-Type: application/json" '+jsonstr['jiraDirectory']+'/rest/api/2/issue/' + issueID, stdout=PIPE, shell=True).stdout.read()
     
 
 #newIssue("day1/post5.jpg", '1')
-moveIssue("POS-525", "2", "1")
-#deleteIssue("10257")
+#moveIssue("POS-525", "2", "1")
+#deleteIssue("POS-525")
 #addImage("10259", "day1\\post2.jpg")
