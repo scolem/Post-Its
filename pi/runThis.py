@@ -21,6 +21,7 @@ import os
 import time
 from changetime import makeTime
 from issue import jsonconfig2str
+import shutil
 
 
 def getfileDir():
@@ -32,7 +33,10 @@ def getfileDir():
     last=line
     line=f.readline()
 
+##  print jsonconfig2str()['picDirectory']
+##  print last
   filedir=jsonconfig2str()['picDirectory'] + str(last) + "/"
+  f.close()
   return filedir
 
 def countDots():
@@ -58,19 +62,27 @@ def countDots():
 
   return noDots
 
+def remLastLine(file):
+  print 'removing picture'
+  readFile=open('timelog.txt')
+  lines=readFile.readlines()
+  readFile.close()
 
+  w=open('timelog.txt', 'w')
+  w.writelines([item for item in lines[:-1]])
+  w.close()
+
+  shutil.rmtree(file)
 
 print 'starting program'
-
 #create new file to process in and update timelog
-#makeTime()
-
+makeTime()
 filedir=getfileDir()
 print filedir
 
 #take picture
 print 'taking picture'
-#os.system('raspistill -o '+filedir+'pic.jpg')
+os.system('raspistill -o '+filedir+'pic.jpg')
 
 #Check number of dots
 numDots=countDots()
@@ -82,7 +94,7 @@ if numDots == jsonconfig2str()['noCols']*2+2:
 
   #take second picutre
   print 'taking second picture'
-  #os.system('raspistill -o '+filedir+'pic1.jpg')
+  os.system('raspistill -o '+filedir+'pic1.jpg')
 
   im1 = image_preprocessing(filedir+'pic.jpg')
   im2 = image_preprocessing(filedir+'pic1.jpg')
@@ -99,8 +111,9 @@ if numDots == jsonconfig2str()['noCols']*2+2:
       from manage import *
   else:
       print'pictures do not match'
+      remLastLine(filedir)
 
 else:
   print 'Incorrect number of dots'
-
+  remLastLine(filedir)
 print 'ending program'

@@ -323,7 +323,7 @@ def green_blobs(hsv_img,original,region,label):
 def blob(img):
 
 	img = rotateYellows(img)
-	#cv2.imwrite(filedir+'rotatedOriginal.jpg',img)
+	cv2.imwrite(filedir+'rotatedOriginal.jpg',img)
 	region = column(img)
 	original = img.copy()
 	hsv = cv2.cvtColor(img,cv2.COLOR_BGR2HSV)	

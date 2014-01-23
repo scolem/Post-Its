@@ -27,15 +27,18 @@ from issue import jsonconfig2str
 
 f=open(jsonconfig2str()['picDirectory'] +'timelog.txt', 'r')
 
-line=f.readline().strip()
+#line=f.readline().strip()
+line=f.readlines()
+seclast=line[len(line)-2].strip()
+last=line[len(line)-1].strip()
 
-seclast='';
-last='';
+#seclast=lines='';
+#last=line='';
 
-while line:
-  seclast=last
-  last=line
-  line=f.readline().strip()
+#while line:
+#  seclast=last
+#  last=line
+#  line=f.readline().strip()
 
 
 print 'comparing '+last+' and '+seclast
@@ -49,7 +52,7 @@ list2 = glob.glob(jsonconfig2str()['picDirectory'] +seclast+'/post*.jpg')
 #print list2
 
 checkRem=[0]*len(list2)
-
+#print checkRem
 def findAndTrack(list1,list2):
 	sims = 0
 	comps = 0
@@ -67,7 +70,7 @@ def findAndTrack(list1,list2):
 			sign2 = grid_signature(binarize(im2))
 			comps +=1
 			if compare(sign1,sign2) == True:
-				#print list2.index(name2old)
+##				print list2.index(name2old)
 				checkRem[list2.index(name2old)]=1
 				json_name1 = name1[:-3] + 'json' #day2
 				json_name2 = name2[:-3] + 'json' #day1
@@ -112,7 +115,7 @@ def findAndTrack(list1,list2):
 		print '\n'
 
 	for i in range (0, len(list2)):
-		#print checkRem[i]
+##		print checkRem[i]
 		if(checkRem[i]==0):
 			print list2[i] + " was removed"
 			

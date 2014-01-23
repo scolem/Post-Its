@@ -25,7 +25,7 @@ import string
 
 def jsonconfig2str():#get the config file as a array
 
-    f=open('C:/Users/Intern2/Documents/Post-Its/pi/config.json', 'r')
+    f=open('/home/pi/Scott/Post-Its/pi/config.json', 'r')
     j=json.load(f)
     
     return j
@@ -87,7 +87,7 @@ def moveIssue(issueID, col1, col2):#move issue between columns
     fout.write('{"transition": { "id": "'+str(moveID)+'"}}')
     fout.close()
 
-    print Popen('curl -u '+jsonstr['username']+':'+jsonstr['password']+' -X POST --data @'+jsonstr['picDirectory']+'\\move.txt -H "Content-Type: application/json" '+jsonstr['jiraDirectory']+'/rest/api/2/issue/'+issueID+'/transitions?expand=transitions.fields ', stdout=PIPE, shell=True).stdout.read()
+    Popen('curl -u '+jsonstr['username']+':'+jsonstr['password']+' -X POST --data @'+jsonstr['picDirectory']+'\\move.txt -H "Content-Type: application/json" '+jsonstr['jiraDirectory']+'/rest/api/2/issue/'+issueID+'/transitions?expand=transitions.fields ', stdout=PIPE, shell=True).stdout.read()
 
 def addImage(issueID, imgLink):#add image to issue
    print'adding image'
@@ -104,7 +104,7 @@ def newIssue(picLink, col):#create new issue
     fout.close()
     
     line= Popen('curl -v -u '+jsonstr['username']+':'+jsonstr['password']+' -X POST --data @'+jsonstr['picDirectory']+'/new.txt -H \"Content-Type: application/json\" '+jsonstr['jiraDirectory']+'/rest/api/2/issue/', stdout=PIPE, shell=True).stdout.read()
-    print line
+    #print line
     
     issueID=jsonstr2field(line, "id")
     
@@ -120,7 +120,7 @@ def newIssue(picLink, col):#create new issue
 def deleteIssue(issueID):#delete issue
     print 'deleting issue'
     jsonstr=jsonconfig2str()
-    print Popen('curl -u '+jsonstr['username']+':'+jsonstr['password']+' -X DELETE -H "Content-Type: application/json" '+jsonstr['jiraDirectory']+'/rest/api/2/issue/' + issueID, stdout=PIPE, shell=True).stdout.read()
+    Popen('curl -u '+jsonstr['username']+':'+jsonstr['password']+' -X DELETE -H "Content-Type: application/json" '+jsonstr['jiraDirectory']+'/rest/api/2/issue/' + issueID, stdout=PIPE, shell=True).stdout.read()
     
 
 #newIssue("day1/post5.jpg", '1')
