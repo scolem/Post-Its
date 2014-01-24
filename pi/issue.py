@@ -103,7 +103,7 @@ def newIssue(picLink, col):#create new issue
     fout.write('{"fields": {"project":{"key": "'+jsonstr["projectKey"]+'" },"summary": "'+jsonstr['summary']+'","description": "'+jsonstr['description']+'","issuetype": {"name": "'+jsonstr["issueName"]+'"},"priority": {"name": "'+jsonstr["priority"]+'"}}}')
     fout.close()
     
-    line= Popen('curl -v -u '+jsonstr['username']+':'+jsonstr['password']+' -X POST --data @'+jsonstr['picDirectory']+'/new.txt -H \"Content-Type: application/json\" '+jsonstr['jiraDirectory']+'/rest/api/2/issue/', stdout=PIPE, shell=True).stdout.read()
+    line= Popen('curl -u '+jsonstr['username']+':'+jsonstr['password']+' -X POST --data @'+jsonstr['picDirectory']+'/new.txt -H \"Content-Type: application/json\" '+jsonstr['jiraDirectory']+'/rest/api/2/issue/', stdout=PIPE, shell=True).stdout.read()
     #print line
     
     issueID=jsonstr2field(line, "id")

@@ -25,18 +25,21 @@ import math
 from issue import jsonconfig2str
 #import test as t
 
-f=open(jsonconfig2str()['picDirectory'] +'timelog.txt', 'r+')
-line=f.readline()
+config=jsonconfig2str()
 
-while line:
-  last=line
-  line=f.readline()
+f=open(config['picDirectory'] +'timelog.txt', 'r+')
+#line=f.readline()
 
+#while line:
+#  last=line
+#  line=f.readline()
+lines=f.readlines()
+last=lines[len(lines)-1]
 
-filedir=jsonconfig2str()['picDirectory'] + str(last) + "/"
+filedir=config['picDirectory'] + str(last) + "/"
 #print filedir
-
-noCols=jsonconfig2str()['noCols']
+f.close()
+noCols=config['noCols']
 
 #Return the angle in degrees
 def angle(row_diff, col_diff):

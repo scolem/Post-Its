@@ -25,13 +25,14 @@ from test import *
 from issue import *
 from issue import jsonconfig2str
 
-f=open(jsonconfig2str()['picDirectory'] +'timelog.txt', 'r')
+config=jsonconfig2str()
+f=open(config['picDirectory'] +'timelog.txt', 'r')
 
-#line=f.readline().strip()
+line=f.readline().strip()
 line=f.readlines()
 seclast=line[len(line)-2].strip()
 last=line[len(line)-1].strip()
-
+f.close()
 #seclast=lines='';
 #last=line='';
 
@@ -47,8 +48,8 @@ print 'comparing '+last+' and '+seclast
 #list3 = glob.glob('day2/post?.json') + glob.glob('day2/post??.json')
 #list4 = glob.glob('day1/post?.json') + glob.glob('day1/post??.json')
 
-list1 = glob.glob(jsonconfig2str()['picDirectory'] +last+'/post*.jpg')
-list2 = glob.glob(jsonconfig2str()['picDirectory'] +seclast+'/post*.jpg')
+list1 = glob.glob(config['picDirectory'] +last+'/post*.jpg')
+list2 = glob.glob(config['picDirectory'] +seclast+'/post*.jpg')
 #print list2
 
 checkRem=[0]*len(list2)

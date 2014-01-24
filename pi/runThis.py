@@ -23,19 +23,21 @@ from changetime import makeTime
 from issue import jsonconfig2str
 import shutil
 
+config=jsonconfig2str()
 
 def getfileDir():
   #get file directory
-  f=open(jsonconfig2str()['picDirectory'] +'timelog.txt', 'r+')
-  line=f.readline()
-
-  while line:
-    last=line
-    line=f.readline()
+  f=open(config['picDirectory'] +'timelog.txt', 'r+')
+#  line=f.readline()
+  lines=f.readlines()
+  last=lines[len(lines)-1]
+#  while line:
+#    last=line
+#    line=f.readline()
 
 ##  print jsonconfig2str()['picDirectory']
 ##  print last
-  filedir=jsonconfig2str()['picDirectory'] + str(last) + "/"
+  filedir=config['picDirectory'] + str(last) + "/"
   f.close()
   return filedir
 
@@ -69,7 +71,8 @@ def remLastLine(file):
   readFile.close()
 
   w=open('timelog.txt', 'w')
-  w.writelines([item for item in lines[:-1]])
+  w.writelines([item for item in lines[:-2]])
+  w.write(lines[len(lines)-2].rstrip())
   w.close()
 
   shutil.rmtree(file)
@@ -89,7 +92,7 @@ numDots=countDots()
 print 'Number of dots found: '+str(numDots)
 # jsonconfig2str()['noCols']
 
-if numDots == jsonconfig2str()['noCols']*2+2:
+if numDots == config['noCols']*2+2:
   print 'Correct number of dots'
 
   #take second picutre
