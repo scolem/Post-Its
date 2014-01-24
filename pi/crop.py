@@ -264,7 +264,7 @@ def square_contours(threshed_image,original,name,region,label):
 			post_name = filedir+'post' + str(noOfPostIts+label) + '.jpg'
 			txt_name = filedir+'post' + str(noOfPostIts+label) + '.json'
 		
-			j=json.dumps({'label':noOfPostIts+label,'signature':sign.tolist() , 'x':xloc, 'y':yloc, 'column':reg, 'issueID':filedir[2:]+'post' + str(noOfPostIts+label)+ '.jpg'},indent=4)
+			j=json.dumps({'label':noOfPostIts+label,'signature':sign.tolist() , 'x':xloc, 'y':yloc, 'column':reg, 'issueID':filedir[2:]+'post' + str(noOfPostIts+label)+ '.jpg', 'type':name},indent=4)
 			f=open(txt_name,'w')
 			f.write(j)
 			f.close()
