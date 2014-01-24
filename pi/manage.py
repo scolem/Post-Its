@@ -69,7 +69,11 @@ def findAndTrack(list1,list2):
 			im2 = cv2.imread(name2)
 			sign2 = grid_signature(binarize(im2))
 			comps +=1
-			if compare(sign1,sign2) == True:
+
+			col1=json.load(open(name1[:-3] + 'json'))["type"]
+			col2=json.load(open(name2[:-3] + 'json'))["type"]
+			#print col1+col2
+			if compare(sign1, col1, sign2, col2) == True:
 ##				print list2.index(name2old)
 				checkRem[list2.index(name2old)]=1
 				json_name1 = name1[:-3] + 'json' #day2

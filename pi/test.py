@@ -52,7 +52,7 @@ def grid_signature(im):
 
 #Gets the signatures and checks for similarity
 #Returns True for similar and False otherwise.
-def compare(sign1,sign2):
+def compare(sign1,colour1,sign2,colour2):
 #	print sign1
 	#print '\n\n'
 #	print sign2
@@ -61,12 +61,15 @@ def compare(sign1,sign2):
 	tolerance = diff[(diff > 0.3)].size
 #	print tolerance
 #	print diff
-	if tolerance > 5 and diff.max()>0.64:
+#	print (tolerance < 5)
+#	print(diff.max()<0.64)
+#	print (colour1 == colour2)
+	if ((tolerance < 5) or (diff.max()<0.64)) and (colour1 == colour2):
 		#print ' not similar '
-		return False
+		return True
 	else:
 		#print ' similar '			
-		return True
+		return False
 
 #Reads and converts a color image to grayscale, then to black and white. 
 #Also resizes the image. We process 400X400 square images.
@@ -87,6 +90,6 @@ def binarize(image):
 	return im_bw
 
 #im1 and im2 are examples of some post-its. Try with some other examples as well.
-#im1 = image_preprocessing('post9.jpg')
-#im2 = image_preprocessing('post7.jpg')
-#print compare(grid_signature(im1), grid_signature(im2))
+#im1 = image_preprocessing('post1.jpg')
+#im2 = image_preprocessing('post2.jpg')
+#print compare(grid_signature(im1), 'blue', grid_signature(im2), 'blue')
