@@ -70,12 +70,30 @@ def remLastLine(file):
   lines=readFile.readlines()
   readFile.close()
 
-  w=open('timelog.txt', 'w')
+  w=open(config['picDirectory']+'timelog.txt', 'w')
   w.writelines([item for item in lines[:-2]])
   w.write(lines[len(lines)-2].rstrip())
   w.close()
 
   shutil.rmtree(file)
+
+def remOld():
+  r=open(config['picDirectory']+'timelog.txt')
+  lines=r.readlines()
+  r.close
+
+  w=open(config['picDirectory']+'timelog.txt', 'w')
+  for item in lines[:-3]:
+    print 'delete'+config['picDirectory']+item.strip()
+    shutil.rmtree(config['picDirectory']+item.strip())
+
+  print 'to file'
+
+  for item in range (-3,0):
+    print lines[len(lines)+item].strip()
+    w.write(lines[len(lines)+item])
+
+  w.close()
 
 print 'starting program'
 #create new file to process in and update timelog
@@ -102,7 +120,7 @@ if numDots == config['noCols']*2+2:
   im1 = image_preprocessing(filedir+'pic.jpg')
   im2 = image_preprocessing(filedir+'pic1.jpg')
 
-  compare= compare(grid_signature(im1), grid_signature(im2))
+  compare= compare(grid_signature(im1), 'blue', grid_signature(im2), 'blue')
 
   if compare:
       print'pictures match'
@@ -112,6 +130,8 @@ if numDots == config['noCols']*2+2:
       
       #manage images
       from manage import *
+
+      remOld()
   else:
       print'pictures do not match'
       remLastLine(filedir)
