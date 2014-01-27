@@ -1,0 +1,4 @@
+pi/*.txt
+pi/*.pyc
+pi/*.json
+pi/**/*
