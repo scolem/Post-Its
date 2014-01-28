@@ -22,10 +22,11 @@ from subprocess import Popen
 from subprocess import PIPE
 import json
 import string
+import os
 
 def jsonconfig2str():#get the config file as a array
 
-    f=open('/home/pi/Scott/Post-Its/pi/config.json', 'r')
+    f=open(os.path.dirname(os.path.realpath(__file__))+'/config.json', 'r')
     j=json.load(f)
     
     return j

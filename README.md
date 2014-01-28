@@ -26,7 +26,6 @@ The following need to be installed
 Set up
 --
 - Copy the content from the git onto the Pi into the directory /home/pi/Scott `cd /home/pi/Scott && git clone https://github.com/scolem/Post-Its`
-- Check issue.py has the correct file directory for config.json (about the seventh line below the license)
 - Open config.json and make the neccessary changes to the file. See below for more details on each field.
 - Set up cron:
   - Simply run `python /home/pi/Scott/Post-Its/setup/addToCron.py`
