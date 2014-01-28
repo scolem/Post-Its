@@ -29,9 +29,13 @@ Set up
 - Check issue.py has the correct file directory for config.json (about the seventh line below the license)
 - Open config.json and make the neccessary changes to the file. See below for more details on each field.
 - Set up cron:
+  - Simply run `python /home/pi/Scott/Post-Its/setup/addToCron.py`
+ 
+  OR
+  
   - On the Pi, run: `crontab -e`  
   - At the bottom of the file type `*/5 * * * * python /home/pi/Scott/Post-Its/pi/runThis.py >>/tmp/out.txt 2>&1` 
-- On the physical task board, mark the corners of the columns with yellow stickers. All future post-its must be contained within these dots. 
+- On the physical task board, mark the corners of the columns with yellow stickers. All future post-its must be contained within these dots. See examples under pics/ . 
 - Connect the Pi the network on which Jira is running using a LAN cable
 
 
