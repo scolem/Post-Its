@@ -35,7 +35,7 @@ Set up
   
   - On the Pi, run: `crontab -e`  
   - At the bottom of the file type `*/5 * * * * python /home/pi/Scott/Post-Its/pi/runThis.py >>/tmp/out.txt 2>&1` 
-- On the physical task board, mark the corners of the columns with yellow stickers. All future post-its must be contained within these dots. See examples under pics/ . 
+- On the physical task board, mark the corners of the columns with yellow stickers. All future post-its must be contained within these dots. See examples under Post-Its/pics/ . 
 - Connect the Pi the network on which Jira is running using a LAN cable
 
 
@@ -87,7 +87,7 @@ Changing the number of columns
 Runtime
 ---
 - A log is avilable at /tmp/out.txt
-- If it all runs correctly, the pictures taken by the camera as well as the cropped pictures can be found at pi/<timestamp>
+- If it all runs correctly, the pictures taken by the camera as well as the cropped pictures can be found at pi/[timestamp]
 - The Jira task board will update to reflect the changes made on the physical task board
 - Error checking:
   When first starting the program, there is some error checking done to see if
