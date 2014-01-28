@@ -22,6 +22,8 @@ import time
 from changetime import makeTime
 from issue import jsonconfig2str
 import shutil
+import subprocess
+from subprocess import PIPE
 
 config=jsonconfig2str()
 
@@ -95,8 +97,16 @@ def remOld():
 
   w.close()
 
+def countProcess():
+  output=subprocess.Popen("ps aux | grep python| grep runThis.py | grep -v grep | grep -v /tmp", stdout=PIPE, shell=True).stdout.readlines()
+  return len(output)
+
 print 'starting program'
 #create new file to process in and update timelog
+if countProcess()>1:
+  print 'process already running'
+  exit()
+
 makeTime()
 filedir=getfileDir()
 print filedir
