@@ -296,7 +296,7 @@ def blue_blobs(hsv_img,original,region):
 def pink_blobs(hsv_img,original,region,label):
 	
 	#Color blobbing for pink and purple in opencv hsv format.
-	PINK_MIN = np.array([130, 90, 50],np.uint8)
+	PINK_MIN = np.array([120, 80, 40],np.uint8)
 	PINK_MAX = np.array([180, 255, 255],np.uint8)
 	pur_pink_threshed = cv2.inRange(hsv_img	, PINK_MIN, PINK_MAX)
 	#Noise removal 

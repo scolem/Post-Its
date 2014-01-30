@@ -22,8 +22,6 @@ import time
 from changetime import makeTime
 from issue import jsonconfig2str
 import shutil
-import subprocess
-from subprocess import PIPE
 
 config=jsonconfig2str()
 
@@ -97,23 +95,15 @@ def remOld():
 
   w.close()
 
-def countProcess():
-  output=subprocess.Popen("ps aux | grep python| grep runThis.py | grep -v grep | grep -v /tmp", stdout=PIPE, shell=True).stdout.readlines()
-  return len(output)
-
 print 'starting program'
 #create new file to process in and update timelog
-if countProcess()>1:
-  print 'process already running'
-  exit()
-
 makeTime()
 filedir=getfileDir()
 print filedir
 
 #take picture
 print 'taking picture'
-os.system('raspistill -o '+filedir+'pic.jpg')
+os.system('raspistill -t 0 -o '+filedir+'pic.jpg')
 
 #Check number of dots
 numDots=countDots()
@@ -125,7 +115,7 @@ if numDots == config['noCols']*2+2:
 
   #take second picutre
   print 'taking second picture'
-  os.system('raspistill -o '+filedir+'pic1.jpg')
+  os.system('raspistill -t 0 -o '+filedir+'pic1.jpg')
 
   im1 = image_preprocessing(filedir+'pic.jpg')
   im2 = image_preprocessing(filedir+'pic1.jpg')
